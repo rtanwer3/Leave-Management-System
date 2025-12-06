@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Management System - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .portal-cards {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            color: #333;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 300px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .card-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .card-button:hover {
+            transform: scale(1.05);
+        }
+
+        .card.user-card .card-button {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .card.check-card .card-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .register-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #11998e;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .register-link a:hover {
+            color: #38ef7d;
+            text-decoration: underline;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .features h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .feature-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .portal-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Leave Management System</h1>
+        <p class="subtitle">Multi-Tenant School Leave Management Platform</p>
+
+        <div class="portal-cards">
+            <a href="user-login.html" class="card user-card">
+                <div class="card-icon">👨‍🏫</div>
+                <div class="card-title">Teacher Portal</div>
+                <div class="card-description">Apply for leaves and view your leave history</div>
+                <button class="card-button">Login as Teacher</button>
+            </a>
+
+            <a href="admin-login.html" class="card admin-card">
+                <div class="card-icon">👨‍💼</div>
+                <div class="card-title">Admin Portal</div>
+                <div class="card-description">Manage leaves, teachers, and school settings</div>
+                <button class="card-button">Login as Admin</button>
+            </a>
+
+            <a href="check-teachers.html" class="card check-card">
+                <div class="card-icon">📋</div>
+                <div class="card-title">Check Teachers</div>
+                <div class="card-description">View which teachers are on leave for any date</div>
+                <button class="card-button">Check Now</button>
+            </a>
+        </div>
+
+        <div class="features">
+            <h2>System Features</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🏫</span>
+                    <span>Multi-School Support</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <span>Leave Quota Management</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📅</span>
+                    <span>Calendar-Based Applications</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔒</span>
+                    <span>Secure Authentication</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <span>Mobile-Responsive Design</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Leave Approval Workflow</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login - Leave Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ================================================ */
+        /* HEADER WITH HOME BUTTON */
+        /* ================================================ */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #11998e;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        /* Home Button */
+        .home-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .home-btn:active {
+            transform: translateY(0);
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.625rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-tab:hover {
+            background: #f0f0f0;
+            color: #11998e;
+        }
+
+        .nav-tab.active {
+            background: #11998e;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* ================================================ */
+        /* LOGIN CONTAINER */
+        /* ================================================ */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            padding: 0.375rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* ================================================ */
+        /* FORM STYLING */
+        /* ================================================ */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .forgot-password a {
+            color: #11998e;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* ================================================ */
+        /* RESPONSIVE */
+        /* ================================================ */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-tabs {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .login-card {
+                padding: 2rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Home Button -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">📅</span>
+                <span>Leave Management</span>
+            </div>
+            
+            <!-- Home Button -->
+            <a href="index.html" class="home-btn">
+                <span class="home-icon">🏠</span>
+                <span>Home</span>
+            </a>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="user-login.html" class="nav-tab active">User</a>
+            <a href="admin-login.html" class="nav-tab">Admin</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Login</h1>
+                <span class="badge">USER PORTAL</span>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="school">Select School:</label>
+                    <select id="school" required>
+                        <option value="">-- Select School --</option>
+                        <option value="1">THE GURUKUL JYOTISAR</option>
+                        <option value="2">THE GURUKUL NILOKHERI</option>
+                        <option value="3">ARYAKULUM NILOKHERI</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">Mobile Number:</label>
+                    <input 
+                        type="tel" 
+                        id="mobile" 
+                        placeholder="Enter your mobile number"
+                        pattern="[6-9][0-9]{9}"
+                        maxlength="10"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn">Login as Teacher</button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="forgot-password.html">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8001';
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const mobile = document.getElementById('mobile').value;
+            const password = document.getElementById('password').value;
+            const schoolId = document.getElementById('school').value;
+            const messageDiv = document.getElementById('message');
+
+            if (!schoolId) {
+                showMessage('Please select a school', 'error');
+                return;
+            }
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', mobile);
+                formData.append('password', password);
+                formData.append('school_id', schoolId);
+
+                console.log('Attempting login...');
+                const response = await fetch(`${API_BASE}/user/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                console.log('Response:', response.status, data);
+
+                if (response.ok) {
+                    // Store token and user info
+                    localStorage.setItem('authToken', data.access_token);
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: data.user_id || data.id,
+                        name: data.name,
+                        school_id: data.school_id,
+                        user_type: 'user',
+                        ...data
+                    }));
+
+                    showMessage('Login successful! Redirecting...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'user-dashboard.html';
+                    }, 1000);
+                } else {
+                    showMessage(data.detail || 'Login failed. Please check your credentials.', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Connection error. Please make sure the server is running.', 'error');
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

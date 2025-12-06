@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+        #status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Flatpickr Calendar Test</h1>
+    
+    <div id="status"></div>
+    
+    <div class="test-section">
+        <h2>Test 1: Simple Calendar</h2>
+        <input type="text" id="test-calendar-1" placeholder="Click to open calendar">
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Multiple Dates</h2>
+        <input type="text" id="test-calendar-2" placeholder="Select multiple dates">
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Inline Calendar</h2>
+        <input type="text" id="test-calendar-3" placeholder="Inline calendar below">
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const status = document.getElementById('status');
+        
+        // Check if Flatpickr loaded
+        if (typeof flatpickr === 'undefined') {
+            status.className = 'error';
+            status.textContent = '❌ ERROR: Flatpickr not loaded! Check internet connection.';
+        } else {
+            status.className = 'success';
+            status.textContent = '✅ SUCCESS: Flatpickr loaded correctly!';
+            
+            // Test 1: Simple calendar
+            try {
+                flatpickr('#test-calendar-1', {
+                    dateFormat: 'd-m-Y',
+                    minDate: 'today'
+                });
+                console.log('✅ Test 1: Simple calendar initialized');
+            } catch (error) {
+                console.error('❌ Test 1 failed:', error);
+            }
+            
+            // Test 2: Multiple dates
+            try {
+                flatpickr('#test-calendar-2', {
+                    mode: 'multiple',
+                    dateFormat: 'd-m-Y',
+                    minDate: 'today'
+                });
+                console.log('✅ Test 2: Multiple dates calendar initialized');
+            } catch (error) {
+                console.error('❌ Test 2 failed:', error);
+            }
+            
+            // Test 3: Inline calendar
+            try {
+                flatpickr('#test-calendar-3', {
+                    inline: true,
+                    dateFormat: 'd-m-Y',
+                    minDate: 'today'
+                });
+                console.log('✅ Test 3: Inline calendar initialized');
+            } catch (error) {
+                console.error('❌ Test 3 failed:', error);
+            }
+        }
+    </script>
+</body>
+</html>

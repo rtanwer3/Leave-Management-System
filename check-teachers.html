@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Teachers on Leave</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ================================================ */
+        /* HEADER */
+        /* ================================================ */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .home-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        /* ================================================ */
+        /* MAIN CONTENT */
+        /* ================================================ */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .card h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #f5576c;
+            box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .message.info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 4px solid #2196f3;
+        }
+
+        /* ================================================ */
+        /* RESULTS */
+        /* ================================================ */
+        .results {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .results h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+        }
+
+        .teachers-list {
+            border: 2px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .teacher-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .teacher-item:last-child {
+            border-bottom: none;
+        }
+
+        .teacher-item:hover {
+            background: #f5f7fa;
+        }
+
+        .teacher-icon {
+            font-size: 1.5rem;
+        }
+
+        .teacher-name {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .no-teachers {
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .stats {
+            background: #f5f7fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f5576c;
+        }
+
+        /* ================================================ */
+        /* RESPONSIVE */
+        /* ================================================ */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .card {
+                padding: 2rem;
+            }
+
+            .card h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">
+                <span style="font-size: 2rem;">📋</span>
+                <span>Check Teachers</span>
+            </div>
+            
+            <a href="index.html" class="home-btn">
+                <span style="font-size: 1.2rem;">🏠</span>
+                <span>Home</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="card">
+            <h1>📋 Check Teachers on Leave</h1>
+            <p class="subtitle">Select a school and date to see which teachers are on leave</p>
+
+            <div id="message" class="message"></div>
+
+            <form id="check-form">
+                <div class="form-group">
+                    <label for="school">🏫 Select School:</label>
+                    <select id="school" required>
+                        <option value="">-- Select School --</option>
+                        <option value="1">THE GURUKUL JYOTISAR</option>
+                        <option value="2">THE GURUKUL NILOKHERI</option>
+                        <option value="3">ARYAKULUM NILOKHERI</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">📅 Select Date:</label>
+                    <input type="text" id="date" placeholder="Click to select date" required>
+                </div>
+
+                <button type="submit" class="btn">🔍 Check Teachers</button>
+            </form>
+
+            <!-- Results Section -->
+            <div id="results" class="results">
+                <h2>Results</h2>
+                <div class="results-header">
+                    <span id="results-title">Teachers on Leave</span>
+                </div>
+                <div id="teachers-list" class="teachers-list"></div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Teachers</div>
+                        <div class="stat-value" id="total-count">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Selected Date</div>
+                        <div class="stat-value" id="selected-date" style="font-size: 1.1rem;">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">School</div>
+                        <div class="stat-value" id="selected-school" style="font-size: 1rem;">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const API_BASE = 'http://127.0.0.1:8001';
+
+        // School names mapping
+        const schoolNames = {
+            '1': 'THE GURUKUL JYOTISAR',
+            '2': 'THE GURUKUL NILOKHERI',
+            '3': 'ARYAKULUM NILOKHERI'
+        };
+
+        // Initialize date picker
+        flatpickr('#date', {
+            dateFormat: 'd-m-Y',
+            minDate: 'today'
+        });
+
+        // Form submission
+        document.getElementById('check-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const schoolId = document.getElementById('school').value;
+            const date = document.getElementById('date').value;
+            const messageDiv = document.getElementById('message');
+            const resultsDiv = document.getElementById('results');
+
+            if (!schoolId) {
+                showMessage('Please select a school', 'error');
+                return;
+            }
+
+            if (!date) {
+                showMessage('Please select a date', 'error');
+                return;
+            }
+
+            // Hide previous results
+            resultsDiv.style.display = 'none';
+            messageDiv.style.display = 'none';
+
+            try {
+                // Using public endpoint (no authentication required)
+                showMessage('Fetching data...', 'info');
+
+                const response = await fetch(`${API_BASE}/dashboard/public/teachersonleave?date=${date}&school_id=${schoolId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data, date, schoolId);
+                    messageDiv.style.display = 'none';
+                } else {
+                    showMessage(data.detail || 'Failed to fetch data. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Connection error. Please make sure the server is running.', 'error');
+            }
+        });
+
+        function displayResults(data, date, schoolId) {
+            const resultsDiv = document.getElementById('results');
+            const teachersList = document.getElementById('teachers-list');
+            const totalCount = document.getElementById('total-count');
+            const selectedDate = document.getElementById('selected-date');
+            const selectedSchool = document.getElementById('selected-school');
+
+            // Update stats
+            totalCount.textContent = data.total_count || 0;
+            selectedDate.textContent = date;
+            selectedSchool.textContent = schoolNames[schoolId] || 'Unknown';
+
+            // Display teachers
+            if (data.teachers_on_leave && data.teachers_on_leave.length > 0) {
+                teachersList.innerHTML = data.teachers_on_leave.map(name => `
+                    <div class="teacher-item">
+                        <span class="teacher-icon">👨‍🏫</span>
+                        <span class="teacher-name">${name}</span>
+                    </div>
+                `).join('');
+            } else {
+                teachersList.innerHTML = `
+                    <div class="no-teachers">
+                        ✅ No teachers on leave for this date
+                    </div>
+                `;
+            }
+
+            resultsDiv.style.display = 'block';
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

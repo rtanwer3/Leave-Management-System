@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Leave Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* ================================================ */
+        /* HEADER WITH BEAUTIFUL NAVIGATION */
+        /* ================================================ */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        /* Navigation Buttons - Beautiful Styling */
+        nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            background: #f5f7fa;
+            color: #667eea;
+        }
+
+        .nav-btn.active {
+            color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            font-weight: 600;
+        }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* Account Dropdown */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .dropdown-menu button {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #333;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-menu button:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu button:hover {
+            background: #f5f7fa;
+            color: #667eea;
+        }
+
+        /* ================================================ */
+        /* MAIN CONTENT AREA */
+        /* ================================================ */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        /* ================================================ */
+        /* FORM STYLING */
+        /* ================================================ */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* ================================================ */
+        /* BUTTONS */
+        /* ================================================ */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* ================================================ */
+        /* MESSAGES */
+        /* ================================================ */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .message.info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 4px solid #1976d2;
+        }
+
+        .message.success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #d32f2f;
+            border-left: 4px solid #d32f2f;
+        }
+
+        /* ================================================ */
+        /* LEAVE HISTORY TABLE STYLES */
+        /* ================================================ */
+        .leave-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .leave-history-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .leave-history-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .leave-history-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .leave-history-table tbody tr:hover {
+            background: #f5f7fa;
+        }
+
+        .leave-history-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status Badge */
+        .status-approved {
+            display: inline-block;
+            padding: 0.375rem 0.875rem;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* ================================================ */
+        /* BEAUTIFUL CALENDAR - ROUNDED DATES WITH SLOTS */
+        /* ================================================ */
+        
+        /* Calendar container - modern shadow */
+        .flatpickr-calendar {
+            width: 420px !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+            border-radius: 20px !important;
+            border: none !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            overflow: hidden !important;
+        }
+        
+        /* Month header - beautiful gradient */
+        .flatpickr-months {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            padding: 24px 20px !important;
+        }
+        
+        .flatpickr-current-month {
+            color: white !important;
+            font-size: 22px !important;
+            font-weight: 700 !important;
+        }
+        
+        .flatpickr-monthDropdown-months,
+        .numInputWrapper {
+            color: white !important;
+            font-weight: 700 !important;
+        }
+        
+        .flatpickr-prev-month svg,
+        .flatpickr-next-month svg {
+            fill: white !important;
+        }
+        
+        .flatpickr-prev-month:hover svg,
+        .flatpickr-next-month:hover svg {
+            fill: rgba(255,255,255,0.8) !important;
+        }
+        
+        /* Weekday headers */
+        .flatpickr-weekdays {
+            background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%) !important;
+            padding: 16px 0 !important;
+        }
+        
+        .flatpickr-weekday {
+            color: #667eea !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Days container */
+        .flatpickr-days {
+            padding: 16px !important;
+            background: white !important;
+        }
+        
+        /* =============================================== */
+        /* CIRCULAR DATE CELLS WITH SLOT DISPLAY */
+        /* =============================================== */
+        .flatpickr-day {
+            width: 52px !important;
+            height: 52px !important;
+            max-width: 52px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            margin: 2px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            color: #333 !important;
+            background: transparent !important;
+            cursor: pointer !important;
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* Date number */
+        .flatpickr-day .date-num {
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            display: block !important;
+        }
+        
+        /* Slot count */
+        .flatpickr-day .slot-count {
+            font-size: 10px !important;
+            font-weight: 500 !important;
+            opacity: 0.9 !important;
+            display: block !important;
+            margin-top: -2px !important;
+        }
+        
+        /* 🟢 Available - Green circle */
+        .flatpickr-day.available {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%) !important;
+            color: white !important;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3) !important;
+        }
+        
+        .flatpickr-day.available:hover {
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%) !important;
+            transform: scale(1.15) !important;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.5) !important;
+        }
+        
+        /* 🟡 Limited - Orange circle */
+        .flatpickr-day.limited {
+            background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%) !important;
+            color: white !important;
+            box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3) !important;
+        }
+        
+        .flatpickr-day.limited:hover {
+            background: linear-gradient(135deg, #ffb74d 0%, #ffcc80 100%) !important;
+            transform: scale(1.15) !important;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.5) !important;
+        }
+        
+        /* 🔴 Fully booked - Red circle */
+        .flatpickr-day.fully-booked,
+        .flatpickr-day.flatpickr-disabled {
+            background: linear-gradient(135deg, #f44336 0%, #ef5350 100%) !important;
+            color: white !important;
+            box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3) !important;
+            cursor: not-allowed !important;
+        }
+        
+        /* Past/other month */
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: #ddd !important;
+            opacity: 0.4 !important;
+        }
+        
+        /* 🔵 Today - Blue ring */
+        .flatpickr-day.today {
+            border: 3px solid #667eea !important;
+            color: #667eea !important;
+            font-weight: 700 !important;
+        }
+        
+        .flatpickr-day.today.available,
+        .flatpickr-day.today.limited,
+        .flatpickr-day.today.fully-booked {
+            border: 3px solid white !important;
+        }
+        
+        /* 💜 Selected - Purple with pulse */
+        .flatpickr-day.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+            transform: scale(1.2) !important;
+            animation: pulse 0.5s ease !important;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.2); }
+            50% { transform: scale(1.25); }
+        }
+        
+        /* Weekend subtle highlight */
+        .flatpickr-day.weekend:not(.selected):not(.available):not(.limited):not(.fully-booked) {
+            background: #f5f7fa !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .flatpickr-calendar {
+                width: 360px !important;
+            }
+            
+            .flatpickr-day {
+                width: 46px !important;
+                height: 46px !important;
+            }
+            
+            .flatpickr-day .date-num {
+                font-size: 14px !important;
+            }
+            
+            .flatpickr-day .slot-count {
+                font-size: 9px !important;
+            }
+
+            header {
+                padding: 1rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">📅</span>
+                <span>Leave Management</span>
+            </div>
+            <nav>
+                <button id="nav-apply" class="nav-btn active">Apply Leave</button>
+                <button id="nav-history" class="nav-btn">My Leaves</button>
+                <button id="nav-available" class="nav-btn">Check Availability</button>
+                <button id="nav-account" class="nav-btn">Account ▼</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Account Dropdown -->
+    <div id="account-dropdown" class="dropdown-menu">
+        <button id="btn-profile">My Profile</button>
+        <button id="btn-logout">Logout</button>
+    </div>
+
+    <main>
+        <!-- Apply Leave View -->
+        <div id="apply-view" class="view active">
+            <div class="card">
+                <h2>Apply for Leave</h2>
+                <div id="apply-message" class="message info" style="display:block;">
+                    <strong>Welcome!</strong><br>
+                    Select dates from the calendar below to apply for leave. Green dates are available, yellow dates have limited slots, and red dates are fully booked or already applied.
+                </div>
+
+                <form id="leave-form">
+                    <div class="form-group">
+                        <label for="leave-calendar">Select Leave Dates:</label>
+                        <input type="text" id="leave-calendar" placeholder="Click to select dates" required>
+                    </div>
+
+                    <div id="selected-dates-display" style="margin-bottom: 1rem;"></div>
+
+                    <button type="submit" class="btn">Submit Leave Application</button>
+                    <div id="leave-message" class="message"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Leave History View -->
+        <div id="history-view" class="view">
+            <div class="card">
+                <h2>My Leave History</h2>
+                <div id="leave-history-list"></div>
+                
+                <hr style="margin: 2rem 0; border: 1px solid #e0e0e0;">
+                
+                <h3>Update Leave Dates</h3>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    Cancel existing leave dates and apply for new dates in one go.
+                </p>
+                
+                <form id="update-leave-form">
+                    <div class="form-group">
+                        <label for="cancel-dates">Dates to Cancel:</label>
+                        <input type="text" id="cancel-dates" placeholder="Select dates to cancel" required>
+                        <small>Select from your existing leave dates above</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-dates">New Dates to Apply:</label>
+                        <input type="text" id="new-dates" placeholder="Select new dates" required>
+                        <small>Select available dates from calendar</small>
+                    </div>
+                    
+                    <button type="submit" class="btn">Update Leave Dates</button>
+                    <div id="update-leave-message" class="message"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Check Availability View -->
+        <div id="available-view" class="view">
+            <div class="card">
+                <h2>Check Leave Availability</h2>
+                
+                <div class="form-group">
+                    <label for="availability-calendar">View Available Dates:</label>
+                    <input type="text" id="availability-calendar" placeholder="Click to view calendar">
+                </div>
+
+                <div id="availability-info" class="message info" style="display:block; margin-top: 1rem;">
+                    <strong>Calendar Legend:</strong><br>
+                    🟢 Green: Available (slots remaining)<br>
+                    🟡 Yellow: Limited slots<br>
+                    🔴 Red: Fully booked or already applied<br>
+                    ⚪ Grey: Past dates (disabled)
+                </div>
+
+                <div id="availability-details"></div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profile-view" class="view">
+            <div class="card">
+                <h2>My Profile</h2>
+                <div id="profile-info"></div>
+                
+                <hr style="margin: 2rem 0; border: 1px solid #e0e0e0;">
+                
+                <h3>Update Profile</h3>
+                <form id="update-profile-form">
+                    <div class="form-group">
+                        <label for="update-mobile">Mobile Number:</label>
+                        <input type="text" id="update-mobile" placeholder="Enter new mobile number (optional)" pattern="[6-9][0-9]{9}">
+                        <small>Leave blank if you don't want to change</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="update-email">Email:</label>
+                        <input type="email" id="update-email" placeholder="Enter new email (optional)">
+                        <small>Leave blank if you don't want to change</small>
+                    </div>
+                    
+                    <button type="submit" class="btn">Update Profile</button>
+                    <div id="update-message" class="message"></div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="app.js"></script>
+    
+    <!-- Calendar formatting is now handled by app.js directly -->
+    <script>
+        console.log('✅ Calendar slot display handled by app.js');
+    </script>
+    <script>
+        // Initialize user dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const authToken = localStorage.getItem('authToken');
+
+            if (!authToken || currentUser.user_type !== 'user') {
+                window.location.href = 'user-login.html';
+                return;
+            }
+
+            // Show welcome message with user name
+            const applyMsg = document.getElementById('apply-message');
+            if (applyMsg && currentUser.name) {
+                applyMsg.innerHTML = `<strong>Welcome, ${currentUser.name}!</strong><br>Select dates from the calendar below to apply for leave. Green dates are available, yellow dates have limited slots, and red dates are fully booked or already applied.`;
+            }
+
+            // Initialize calendar
+            if (typeof initializeCalendar === 'function') {
+                initializeCalendar();
+            }
+
+            // Navigation
+            document.getElementById('nav-apply')?.addEventListener('click', () => {
+                showView('apply');
+                if (typeof initializeCalendar === 'function') initializeCalendar();
+            });
+
+            document.getElementById('nav-history')?.addEventListener('click', () => {
+                showView('history');
+                if (typeof loadLeaveHistory === 'function') loadLeaveHistory();
+            });
+
+            document.getElementById('nav-available')?.addEventListener('click', () => {
+                showView('available');
+                if (typeof initializeAvailabilityCalendar === 'function') {
+                    initializeAvailabilityCalendar();
+                }
+            });
+
+            document.getElementById('nav-account')?.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('account-dropdown');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                e.stopPropagation();
+            });
+
+            document.getElementById('btn-profile')?.addEventListener('click', () => {
+                showView('profile');
+                if (typeof loadUserProfile === 'function') loadUserProfile();
+                document.getElementById('account-dropdown').style.display = 'none';
+            });
+
+            document.getElementById('btn-logout')?.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'user-login.html';
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                const dropdown = document.getElementById('account-dropdown');
+                if (dropdown) dropdown.style.display = 'none';
+            });
+
+            // Function to show different views
+            window.showView = function(viewName) {
+                document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                
+                document.getElementById(`${viewName}-view`).style.display = 'block';
+                document.getElementById(`nav-${viewName}`)?.classList.add('active');
+            };
+        });
+    </script>
+</body>
+</html>
